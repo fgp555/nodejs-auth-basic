@@ -3,26 +3,13 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const morgan = require("morgan");
-const rateLimit = require("express-rate-limit");
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./swagger.json");
-const cors = require("cors");
 
 const app = express();
 const PORT = 3000;
 
-const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000, //  minutos
-  max: 100, // Máximo solicitudes por IP
-  message: "Demasiadas solicitudes desde esta IP. Por favor, inténtelo más tarde.",
-});
-
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(express.static("public"));
-app.use(limiter);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use(cors()); // Permite solicitudes de cualquier origen.
 
 // Mock database
 const users = [{ id: 1, email: "demo@example.com", password: bcrypt.hashSync("Demo@123", 10), role: "user" }];
@@ -30,8 +17,10 @@ const users = [{ id: 1, email: "demo@example.com", password: bcrypt.hashSync("De
 // Middleware to authenticate JWT
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
+
   if (authHeader) {
     const token = authHeader.split(" ")[1];
+
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
         return res.status(403).json({ message: "Forbidden" });
@@ -40,7 +29,7 @@ const authenticateJWT = (req, res, next) => {
       next();
     });
   } else {
-    return res.status(401).json({ message: "Unauthorized" });
+    res.status(401).json({ message: "Unauthorized" });
   }
 };
 
@@ -121,18 +110,6 @@ app.get("/api/private/dashboard", authenticateJWT, (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
-
-app.delete("/api/users/delete/:id", authenticateJWT, (req, res) => {
-  const userId = parseInt(req.params.id);
-  const userIndex = users.findIndex((u) => u.id === userId);
-
-  if (userIndex === -1) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  users.splice(userIndex, 1);
-  res.json({ message: "User deleted successfully" });
 });
 
 // Start the server

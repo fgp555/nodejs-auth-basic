@@ -1,0 +1,148 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Express JWT Authentication API",
+    "description": "API para autenticación con JWT y gestión de usuarios"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "summary": "Registro de usuario",
+        "description": "Registra un nuevo usuario y devuelve un token JWT.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Datos del usuario",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": { "type": "string", "example": "demo2@example.com" },
+                "password": { "type": "string", "example": "Demo@123!" },
+                "role": { "type": "string", "example": "user" }
+              },
+              "required": ["email", "password", "role"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usuario registrado correctamente",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "email": { "type": "string" },
+                    "role": { "type": "string" }
+                  }
+                },
+                "token": { "type": "string" }
+              }
+            }
+          },
+          "400": {
+            "description": "El usuario ya existe",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/signin": {
+      "post": {
+        "summary": "Inicio de sesión",
+        "description": "Inicia sesión y devuelve un token JWT.",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Credenciales del usuario",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": { "type": "string", "example": "demo@example.com" },
+                "password": { "type": "string", "example": "Demo@123" }
+              },
+              "required": ["email", "password"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inicio de sesión exitoso",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" },
+                "token": { "type": "string" }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/findAll": {
+      "get": {
+        "summary": "Obtener todos los usuarios",
+        "description": "Devuelve una lista de todos los usuarios (sin contraseñas).",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de usuarios",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "integer" },
+                  "email": { "type": "string" },
+                  "role": { "type": "string" }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autorizado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "JWT token"
+    }
+  }
+}

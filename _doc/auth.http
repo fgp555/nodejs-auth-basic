@@ -34,5 +34,9 @@ Authorization: Bearer {{token}}
 
 
 ###
+DELETE http://localhost:3000/api/users/delete/1
+Authorization: Bearer {{token}}
+
+###
 GET http://localhost:3000/api/private/dashboard
 Authorization: Bearer {{token}}
