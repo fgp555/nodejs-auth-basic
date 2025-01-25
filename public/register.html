@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.15/tailwind.min.css" />
+  </head>
+  <body class="bg-gray-100">
+    <div class="max-w-md mx-auto mt-20 bg-white p-8 shadow-lg rounded-lg">
+      <h2 class="text-2xl font-bold mb-6">Register</h2>
+      <form id="register-form">
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium">Email</label>
+          <input type="email" id="email" name="email" value="demo2@example.com" class="w-full px-4 py-2 border rounded-lg" required />
+        </div>
+        <div class="mb-4">
+          <label for="password" class="block text-sm font-medium">Password</label>
+          <input type="password" id="password" name="password" value="Demo@P45ssW0rd123" class="w-full px-4 py-2 border rounded-lg" required />
+        </div>
+        <div class="mb-4">
+          <label for="role" class="block text-sm font-medium">Role</label>
+          <input type="text" id="role" name="role" value="admin" class="w-full px-4 py-2 border rounded-lg" required />
+        </div>
+        <div class="flex items-center justify-between mb-4">
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg">Register</button>
+          <a href="/" class="text-blue-500">Already have an account?</a>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      document.getElementById("register-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const role = document.getElementById("role").value;
+
+        // Send registration request
+        const response = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password, role }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          // After successful registration, log in automatically
+          const loginResponse = await fetch("/api/auth/signin", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
+
+          const loginResult = await loginResponse.json();
+          if (loginResponse.ok) {
+            // Store token in localStorage and redirect to the dashboard
+            localStorage.setItem("token", loginResult.token);
+            window.location.href = "dashboard.html";
+          } else {
+            alert(loginResult.message);
+          }
+        } else {
+          alert(result.message);
+        }
+      });
+    </script>
+  </body>
+</html>

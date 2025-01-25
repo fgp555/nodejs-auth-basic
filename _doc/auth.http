@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
     "email": "demo@example.com",
-    "password": "Demo@123"
+    "password": "Demo@P45ssW0rd123"
 }
 
 ###
@@ -14,7 +14,7 @@ POST http://localhost:3000/api/auth/signup
 Content-Type: application/json
 
 {
-    "email": "fgp555@gmail.com",
+    "email": "user123@gmail.com",
     "password": "P4ssWord@123",
     "role": "admin"
 }
@@ -24,7 +24,7 @@ POST http://localhost:3000/api/auth/signin
 Content-Type: application/json
 
 {
-    "email": "fgp555@gmail.com",
+    "email": "user123@gmail.com",
     "password": "P4ssWord@123"
 }
 

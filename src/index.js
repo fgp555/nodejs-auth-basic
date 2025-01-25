@@ -25,7 +25,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(cors()); // Permite solicitudes de cualquier origen.
 
 // Mock database
-const users = [{ id: 1, email: "demo@example.com", password: bcrypt.hashSync("Demo@123", 10), role: "user" }];
+const users = [{ id: 1, email: "demo@example.com", password: bcrypt.hashSync("Demo@P45ssW0rd123", 10), role: "user" }];
 
 // Middleware to authenticate JWT
 const authenticateJWT = (req, res, next) => {
@@ -99,7 +99,12 @@ app.post("/api/auth/signin", async (req, res, next) => {
     // Generate token
     const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-    res.json({ message: "Login successful", token });
+    // Send the token and user info in the response
+    res.json({
+      message: "Login successful",
+      user: { id: user.id, email: user.email, role: user.role },
+      token,
+    });
   } catch (error) {
     next(error);
   }
