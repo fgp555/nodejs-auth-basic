@@ -1,4 +1,4 @@
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJmZ3A1NTVAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzM3Nzg4NDY1LCJleHAiOjE3Mzc4NzQ4NjV9._wm2LUUTBdpnHivyeqFeppxKywsHkSVRW0lOMjwV1qo
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJkZW1vQGV4YW1wbGUuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3Mzg1MTQ3ODQsImV4cCI6MjA1NDA5MDc4NH0.qTlM8EEojDHHQRFVqL0NNAtzt5axSN3z1cQZulEACUY
 
 ###
 POST http://localhost:3000/api/auth/signin
@@ -29,14 +29,14 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/api/users/findAll
+GET http://localhost:3000/api/user/findAll
 Authorization: Bearer {{token}}
 
 
 ###
-DELETE http://localhost:3000/api/users/delete/1
+DELETE http://localhost:3000/api/user/delete/1
 Authorization: Bearer {{token}}
 
 ###
-GET http://localhost:3000/api/private/dashboard
+GET http://localhost:3000/api/user/private/dashboard
 Authorization: Bearer {{token}}

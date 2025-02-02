@@ -1,10 +1,10 @@
 {
   "name": "nodejs-auth-basic",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "dev": "node --watch src/index.js",
-    "start": "node src/index.js"
+    "dev": "node --watch src/main.js",
+    "start": "node src/main.js"
   },
   "keywords": [],
   "author": "",
